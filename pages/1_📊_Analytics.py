@@ -63,9 +63,40 @@ st.plotly_chart(chart1, use_container_width=True)
 chart2 = country_chart(filtered_df)
 st.plotly_chart(chart2, use_container_width=True)
 
+# --------------------------------
+# Clean Numeric Columns
+# --------------------------------
+
+filtered_df["Failure_Event_Count"] = pd.to_numeric(
+    filtered_df["Failure_Event_Count"],
+    errors="coerce"
+)
+
+filtered_df["Downtime"] = pd.to_numeric(
+    filtered_df["Downtime"],
+    errors="coerce"
+)
+
+filtered_df["Maintenance_Cost"] = pd.to_numeric(
+    filtered_df["Maintenance_Cost"],
+    errors="coerce"
+)
+
+# Remove Missing Values
+scatter_df = filtered_df.dropna(
+    subset=[
+        "Failure_Event_Count",
+        "Downtime",
+        "Maintenance_Cost"
+    ]
+)
+
+# --------------------------------
 # Scatter Plot
+# --------------------------------
+
 scatter = px.scatter(
-    filtered_df,
+    scatter_df,
     x="Failure_Event_Count",
     y="Downtime",
     color="Device_Type",
@@ -74,6 +105,10 @@ scatter = px.scatter(
     title="Failure Events vs Downtime"
 )
 
+st.plotly_chart(
+    scatter,
+    use_container_width=True
+)
 st.plotly_chart(scatter, use_container_width=True)
 
 # Heatmap
