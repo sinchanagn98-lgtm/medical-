@@ -1,5 +1,12 @@
 import pandas as pd
+from pathlib import Path
 
 def load_data():
-    df = pd.read_csv("dataset/medical_device_failure.csv")
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    file_path = BASE_DIR / "dataset" / "medical_device_failure.csv"
+
+    df = pd.read_csv(file_path)
+
     return df
