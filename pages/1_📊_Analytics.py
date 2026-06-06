@@ -1,6 +1,7 @@
 
 import streamlit as st
 import plotly.express as px
+import pandas as pd
 from utils.data_loader import load_data
 from utils.charts import maintenance_cost_chart
 from utils.charts import country_chart
