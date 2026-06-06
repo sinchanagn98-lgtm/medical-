@@ -127,17 +127,57 @@ scatter_df = scatter_df[
     scatter_df["Maintenance_Cost"] > 0
 ]
 
+# --------------------------------
+# Scatter Plot Section
+# --------------------------------
 
+# Convert columns to numeric
+filtered_df["Failure_Event_Count"] = pd.to_numeric(
+    filtered_df["Failure_Event_Count"],
+    errors="coerce"
+)
+
+filtered_df["Downtime"] = pd.to_numeric(
+    filtered_df["Downtime"],
+    errors="coerce"
+)
+
+filtered_df["Maintenance_Cost"] = pd.to_numeric(
+    filtered_df["Maintenance_Cost"],
+    errors="coerce"
+)
+
+# Remove invalid rows
+scatter_df = filtered_df.dropna(
+    subset=[
+        "Failure_Event_Count",
+        "Downtime",
+        "Maintenance_Cost",
+        "Device_Type"
+    ]
+)
+
+# Remove invalid bubble sizes
+scatter_df = scatter_df[
+    scatter_df["Maintenance_Cost"] > 0
+]
+
+# Create scatter chart
+scatter = px.scatter(
+    scatter_df,
+    x="Failure_Event_Count",
+    y="Downtime",
+    color="Device_Type",
+    size="Maintenance_Cost",
+    hover_data=["Manufacturer"],
+    title="Failure Events vs Downtime"
+)
+
+# Display chart
 st.plotly_chart(
     scatter,
     use_container_width=True
 )
-
-st.plotly_chart(
-    scatter,
-    use_container_width=True
-)
-st.plotly_chart(scatter, use_container_width=True)
 
 # Heatmap
 numeric_df = filtered_df.select_dtypes(include="number")
